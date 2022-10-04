@@ -1,9 +1,68 @@
 Working REST API WITH QUARKUS JAVA
 KEYCLOAK AUTHENTICATION-AUTHORIZATION SERVER WITH POSTRGRESQL:  
-authetication-server.yml for command docker-compose -f "file" up
+authentication-server.yml for command docker-compose -f "file" up
 REALM CONFIGURATION FOR STARTER ROLES: (ADMIN, USER): quarkus-realm.json
 
 
+ALL files for those steps added to: https://github.com/eif-courses/production-api/tree/master/src/main/authentication-server
+
+# STEP 1 
+
+Install docker into your machine: https://www.docker.com/products/docker-desktop/
+
+# STEP 2 
+
+Install Keycloak server with postgresql added for authentication and authorization using Bearer tokens
+
+run command: ``` docker-compose -f authentication-server.yml up ```
+
+if everything is ok you will see in docker desktop or terminal window two containers running:
+
+![image](https://user-images.githubusercontent.com/8007447/193873345-51e0b13b-8dc7-4be0-8864-fd7ffdecb730.png)
+
+# STEP 3 
+
+Go to browser and open ``` http://localhost:8180/auth ```
+
+Enter username: *admin* and password: *admin*
+
+Left side of page you will see Master so you need create new realm from prepared JSON file 
+
+![image](https://user-images.githubusercontent.com/8007447/193874098-578d36db-ab01-4171-bf12-b52350f5c2f8.png)
+
+Hover on image and click Add new realm button then click Select file pick one: ``` quarkus-realm.json ``` and import it. 
+If everything is fine you will see successfully.... message.
+
+# STEP 4 
+
+Run you simple rest API 
+```shell script
+./mvnw compile quarkus:dev
+``` 
+with few endpoints and different roles
+
+``` http://localhost:8080/api/secured ```
+
+Then you should see error 401 non authorized so its fine. 
+
+# STEP 5 
+
+Check your endpoint with access token instead of Frontend creation first use tool like CURL or other similar for http requests 
+
+Generate access token using http plugin in Intellij IDEA Ultimate:
+
+``` POST http://localhost:8180/auth/realms/quarkus/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+client_id=backend-service&grant_type=password&client_secret=secret&scope=openid&username=alice&password=alice
+```
+
+Try to access secured endpoint (add newly created token from POST request): 
+```
+GET http://localhost:8080/api/secure
+accept: */*
+Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJjZklBRE5feHhDSm1Wa1d5Ti1QTlhFRXZNVVdzMnI2OEN4dG1oRUROelhVIn0.eyJleHAiOjE2NjQ4OTk2MzYsImlhdCI6MTY2NDg5OTMzNiwianRpIjoiNDY3ZTg5MTEtYjdkOS00YWZjLWExZDQtNzRiMmE4YzI3ZmMyIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MTgwL2F1dGgvcmVhbG1zL3F1YXJrdXMiLCJzdWIiOiJlYjQxMjNhMy1iNzIyLTQ3OTgtOWFmNS04OTU3ZjgyMzY1N2EiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJiYWNrZW5kLXNlcnZpY2UiLCJzZXNzaW9uX3N0YXRlIjoiZDk2OTQ3NTktYTI0OC00NGU4LTgyODQtMDIzZThkM2MzZWU4IiwiYWNyIjoiMSIsInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJ1c2VyIl19LCJzY29wZSI6Im9wZW5pZCBlbWFpbCBwcm9maWxlIiwic2lkIjoiZDk2OTQ3NTktYTI0OC00NGU4LTgyODQtMDIzZThkM2MzZWU4IiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJhbGljZSJ9.Fb9Zyuel6CZjvpgAFq1m_dWYlkS5JyehQFbk2JClCvYxRxVHi5XQWhv1xbctwHrSBE47ZRrblPvAHUQnj5aTZEpAiLhAUoIYkvJ3DuMlZyRv92ddi3vkopwOycbTeEREl1vP9VC6c_DxHQzOMT_3CeDckNOs48ZSg77H57fydL2OSCc1eB4hYs-56kVVqMIw89tKPV89twb50LZzsxBqahwB30LBXRQkRiBej2WXt1gb6DEp7jcSmAlK1_YABDz2P_I0rSIlanGSztR-4nF1GlCkmXu8zQ1Rg4E7_GyQJFPXbfGfwY8EpLoR2OtPdwqRXzDJip6gCO2U2JNxyO6DaA
+```
+If you everything is fine you will see ``` Hello Secured ```. 
 
 # production-api Project
 

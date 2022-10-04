@@ -1,10 +1,6 @@
-Working REST API WITH QUARKUS JAVA
-KEYCLOAK AUTHENTICATION-AUTHORIZATION SERVER WITH POSTRGRESQL:  
-authentication-server.yml for command docker-compose -f "file" up
-REALM CONFIGURATION FOR STARTER ROLES: (ADMIN, USER): quarkus-realm.json
+## REST API WITH QUARKUS JAVA KEYCLOAK AUTHENTICATION-AUTHORIZATION SERVER WITH POSTRGRESQL
 
-
-ALL files for those steps added to: https://github.com/eif-courses/production-api/tree/master/src/main/authentication-server
+ALL files for steps bellow you will find here: https://github.com/eif-courses/production-api/tree/master/src/main/authentication-server
 
 # STEP 1 
 
